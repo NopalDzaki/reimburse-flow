@@ -1,142 +1,141 @@
 <div align="center">
   <h1>💸 Reimburse Flow</h1>
   <p>
-    A streamlined, role-based reimbursement management platform built with Next.js.
+    <strong>Modern reimbursement management system with role-based workflows</strong>
   </p>
+
+  <p>
+    <a href="https://github.com/nopaldzaki/reimburse-flow">
+      <img src="https://img.shields.io/github/stars/nopaldzaki/reimburse-flow?style=social" />
+    </a>
+    <img src="https://img.shields.io/badge/Next.js-15-black" />
+    <img src="https://img.shields.io/badge/TypeScript-Strict-blue" />
+    <img src="https://img.shields.io/badge/UI-Tailwind%20%2B%20Radix-38BDF8" />
+  </p>
+
   <p>
     <a href="#-features">Features</a> •
     <a href="#-tech-stack">Tech Stack</a> •
     <a href="#-installation">Installation</a> •
-    <a href="#-usage">Usage</a>
+    <a href="#-usage">Usage</a> •
+    <a href="#-roadmap">Roadmap</a>
   </p>
 </div>
 
 ---
 
-## 📖 Description
+## ✨ Overview
 
-**Reimburse Flow** is a modern web application designed to simplify and automate the expense reimbursement process within an organization.
+**Reimburse Flow** is a role-based reimbursement system built to eliminate messy expense processes and replace them with a clean, structured, and trackable workflow.
 
-It provides a seamless experience for employees to submit claims, while offering powerful dashboards for administrators and finance teams to review, track, and approve requests.
+From submission → review → approval → payout, everything is handled in one centralized platform with clear visibility for every role.
 
-Built with performance and user experience in mind, the system uses **Role-Based Access Control (RBAC)** to ensure secure and tailored views for different organizational roles.
+> No more Excel chaos. No more “udah di-approve belum sih?” drama.
 
 ---
 
 ## 🚀 Features
 
-- 🔐 **Role-Based Access Control (RBAC)**  
-  Tailored interfaces and permissions for User, Admin, Finance, and Superadmin.
+### 🔐 Smart Role System (RBAC)
+- User, Admin, Finance, Superadmin access
+- Isolated dashboards & permissions
+- Real workflow simulation
 
-- 🛡️ **Secure Authentication**  
-  Protected routes layout ensuring data privacy.
+### 📊 Real-Time Tracking
+- Monitor claim status instantly
+- Clear progress from submission → payout
 
-- 📊 **Intuitive Dashboards**  
-  Customized analytics and activity feeds for each role.
+### 📈 Interactive Dashboard
+- Visual insights with Recharts
+- Activity monitoring per role
 
-- 💼 **Claim Management**  
-  Easy submission, review, and tracking of reimbursement reports.
+### 💼 Claim Workflow
+- Submit reimbursement
+- Review & approve system
+- Organized history tracking
 
-- 📱 **Responsive UI/UX**  
-  Fully responsive design built with modern UI components.
+### 🎨 Modern UI/UX
+- Clean, responsive layout
+- Built with Tailwind + Radix
+- Focused on usability, not just aesthetics
 
-- 🌗 **Theme Support**  
-  Built-in Light and Dark mode toggles for better accessibility.
+### 🌗 Theme System
+- Dark / Light mode
+- Consistent design system
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category       | Technology                   |
-|----------------|----------------------------|
-| Framework      | Next.js (App Router)       |
-| Language       | TypeScript                 |
-| Styling        | Tailwind CSS               |
-| UI Components  | Radix UI / Custom UI       |
-| Icons          | Lucide React               |
-| Tooling        | ESLint, PostCSS            |
+| Category       | Tech                        |
+|----------------|-----------------------------|
+| Framework      | Next.js 15 (App Router)     |
+| Language       | TypeScript                  |
+| Styling        | Tailwind CSS                |
+| UI System      | Radix UI / shadcn/ui        |
+| State          | React Context API           |
+| Charts         | Recharts                    |
+| Icons          | Lucide React                |
 
 ---
 
 ## 📦 Installation
 
-### 1. Clone Repository
 ```bash
 git clone https://github.com/nopaldzaki/reimburse-flow.git
 cd reimburse-flow
-```
-
-### 2. Install Dependencies
-```bash
 npm install
 ```
 
-### 3. Setup Environment Variables
+### Setup env
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local` sesuai kebutuhan.
-
-### 4. Run Development Server
+### Run app
 ```bash
 npm run dev
 ```
 
-Buka di browser: http://localhost:3000
-
----
-
-## ⚙️ Configuration
-
-- `next.config.ts` → konfigurasi Next.js  
-- `theme-provider.tsx` → pengaturan tema  
-- `globals.css` → styling global  
-
-Untuk ubah tampilan:
-- Edit `globals.css`
-- Edit Tailwind config (jika ada)
+Open → http://localhost:3000
 
 ---
 
 ## ▶️ Usage
 
-### 🔑 Login
+### 🔑 Auth
 - `/login`
 
 ### 👤 User
+- Dashboard → `/user/dashboard`
 - Submit → `/user/submit`
 - History → `/user/history`
 
-### 💰 Finance
-- Payments → `/finance/payments`
-
 ### 🛠️ Admin
+- Dashboard → `/admin/dashboard`
 - Review → `/admin/review`
 
+### 💰 Finance
+- Dashboard → `/finance/dashboard`
+- Payments → `/finance/payments`
+
 ### 🧠 Superadmin
-- Manage semua data & audit log
+- Full system access & control
 
 ---
 
 ## 📂 Project Structure
 
 ```bash
-reimburse-flow/
-├── public/
-├── src/
-│   ├── app/
-│   │   ├── (auth)/
-│   │   ├── (protected)/
-│   │   └── globals.css
-│   ├── components/
-│   │   ├── layout/
-│   │   ├── shared/
-│   │   └── ui/
-│   ├── config/
-│   └── lib/
-├── package.json
-└── tsconfig.json
+src/
+├── app/
+│   ├── (auth)/
+│   └── (protected)/
+├── components/
+├── context/
+├── hooks/
+├── lib/
+└── types/
 ```
 
 ---
@@ -145,13 +144,12 @@ reimburse-flow/
 
 ```env
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_API_URL=your_api_endpoint_here
-AUTH_SECRET=your_auth_secret_key_here
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
 ```
 
 ---
 
-## 🧪 Testing
+## 🧪 Scripts
 
 ```bash
 npm run lint
@@ -162,47 +160,31 @@ npm run build
 
 ## 🚧 Roadmap
 
-- [ ] Database integration (Prisma / Drizzle)
-- [ ] NextAuth authentication
-- [ ] Email notifications
-- [ ] OCR receipt scanning
-- [ ] Export PDF & Excel
+- [ ] Backend integration (Prisma / Drizzle)
+- [ ] Authentication (NextAuth / Auth.js)
+- [ ] File upload (S3 / Supabase)
+- [ ] Email notification system
+- [ ] Unit testing
 
 ---
 
 ## 🤝 Contributing
 
-1. Fork repo  
-2. Create branch  
 ```bash
 git checkout -b feature/your-feature
-```
-
-3. Commit  
-```bash
-git commit -m "Add feature"
-```
-
-4. Push  
-```bash
+git commit -m "feat: add something cool"
 git push origin feature/your-feature
 ```
-
-5. Pull Request  
-
----
-
-## 📝 License
-
-MIT License
 
 ---
 
 ## 👤 Author
 
-Naufal Dzaki  
+**Naufal Dzaki**  
 https://github.com/nopaldzaki  
 
 ---
 
-<p align="center">Built with 💻 and ☕</p>
+<p align="center">
+  Built with 💻, ☕, and questionable life choices
+</p>
