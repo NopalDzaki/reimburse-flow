@@ -1,4 +1,7 @@
-import { SharedCreateReportPage } from "@/components/shared/create-report-page"
-export default function AdminCreateReportPage() {
-  return <SharedCreateReportPage role="admin" />
+"use client";
+
+import { SharedReportCreate } from "@/components/shared/report-create";
+
+export default function AdminReportCreatePage() {
+  return <SharedReportCreate role="admin" backHref="/admin/reports" />;
 }

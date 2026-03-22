@@ -1,20 +1,29 @@
+"use client"
+
 import * as React from "react"
 import Link from "next/link"
 import { PageHeader } from "@/components/shared/page-header"
 import { StatusBadge } from "@/components/shared/status-badge"
 import { Button } from "@/components/ui/button"
 import { Filter, Search, Eye } from "lucide-react"
-
-const MOCK_CLAIMS = [
-  { id: "TXN-90210", title: "Business Trip: NYC Tech Week", category: "Travel", amount: "$1,240.00", date: "Oct 24, 2023", status: "paid" as const },
-  { id: "TXN-88421", title: "Client Dinner – Blue Ribbon", category: "Meals", amount: "$215.50", date: "Oct 22, 2023", status: "pending" as const },
-  { id: "TXN-77612", title: "Home Office Internet – June", category: "Utilities", amount: "$85.00", date: "Oct 18, 2023", status: "approved" as const },
-  { id: "TXN-11204", title: "Taxi to Airport", category: "Transport", amount: "$45.00", date: "Oct 17, 2023", status: "submitted" as const },
-  { id: "TXN-68210", title: "SaaS Subscription – Figma", category: "Software", amount: "$144.00", date: "Oct 12, 2023", status: "rejected" as const },
-  { id: "TXN-55310", title: "Conference Badge – DevSummit", category: "Events", amount: "$350.00", date: "Oct 6, 2023", status: "paid" as const },
-]
+import { useAuth } from "@/context/auth-context"
+import { useReimbursements } from "@/context/reimbursement-context"
+import { formatCurrencyIDR, formatDateID } from "@/lib/utils"
+import { toast } from "sonner"
 
 export default function UserHistoryPage() {
+  const { user } = useAuth()
+  const { reimbursements } = useReimbursements()
+  const [search, setSearch] = React.useState("")
+
+  const userClaims = reimbursements
+    .filter(r => r.submittedBy === user?.id)
+    .filter(r => 
+      search === "" || 
+      r.title.toLowerCase().includes(search.toLowerCase()) || 
+      r.id.toLowerCase().includes(search.toLowerCase())
+    )
+
   return (
     <div className="space-y-6">
       <PageHeader 
@@ -31,9 +40,14 @@ export default function UserHistoryPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
         <div className="relative w-full sm:max-w-xs">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <input placeholder="Search claims…" className="h-9 w-full rounded-md border border-input bg-transparent pl-9 pr-4 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+          <input 
+            placeholder="Search claims…" 
+            className="h-9 w-full rounded-md border border-input bg-transparent pl-9 pr-4 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" 
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
-        <Button variant="outline" size="sm" className="gap-2 shrink-0">
+        <Button variant="outline" size="sm" className="gap-2 shrink-0" onClick={() => toast.info("Advanced status filters coming soon")}>
           <Filter className="h-4 w-4" /> Filter
         </Button>
       </div>
@@ -52,28 +66,35 @@ export default function UserHistoryPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border/30">
-            {MOCK_CLAIMS.map((c) => (
+            {userClaims.map((c) => (
               <tr key={c.id} className="hover:bg-muted/20 transition-colors">
                 <td className="px-6 py-4">
                   <p className="font-medium text-foreground">{c.title}</p>
                   <p className="text-xs text-muted-foreground">{c.id}</p>
                 </td>
                 <td className="px-6 py-4 text-muted-foreground">{c.category}</td>
-                <td className="px-6 py-4 text-muted-foreground">{c.date}</td>
-                <td className="px-6 py-4 text-right font-semibold text-foreground">{c.amount}</td>
+                <td className="px-6 py-4 text-muted-foreground">{formatDateID(c.submittedAt)}</td>
+                <td className="px-6 py-4 text-right font-semibold text-foreground">{formatCurrencyIDR(c.amount)}</td>
                 <td className="px-6 py-4"><StatusBadge status={c.status} /></td>
                 <td className="px-6 py-4 text-right">
-                  <Button variant="ghost" size="icon" className="h-8 w-8"><Eye className="h-4 w-4 text-muted-foreground" /></Button>
+                  <Button asChild variant="ghost" size="icon" className="h-8 w-8 text-primary hover:text-primary"><Link href={`/user/history/${c.id}`}><Eye className="h-4 w-4" /></Link></Button>
                 </td>
               </tr>
             ))}
+            {userClaims.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-6 py-8 text-center text-muted-foreground">
+                  {search !== "" ? "No claims found matching your search." : "You have not submitted any claims yet."}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
       {/* Mobile Card List */}
       <div className="grid gap-3 md:hidden">
-        {MOCK_CLAIMS.map((c) => (
+        {userClaims.map((c) => (
           <div key={c.id} className="rounded-xl border border-border/50 bg-card p-4 shadow-sm flex flex-col gap-3">
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1 min-w-0">
@@ -83,11 +104,11 @@ export default function UserHistoryPage() {
               <StatusBadge status={c.status} />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xl font-heading font-bold text-foreground">{c.amount}</span>
-              <span className="text-xs text-muted-foreground">{c.date}</span>
+              <span className="text-xl font-heading font-bold text-foreground">{formatCurrencyIDR(c.amount)}</span>
+              <span className="text-xs text-muted-foreground">{formatDateID(c.submittedAt)}</span>
             </div>
-            <Button variant="outline" size="sm" className="w-full gap-2">
-              <Eye className="h-4 w-4" /> View Details
+            <Button asChild variant="outline" size="sm" className="w-full gap-2 text-primary border-primary/30 hover:bg-primary/10">
+              <Link href={`/user/history/${c.id}`}><Eye className="h-4 w-4" /> View Details</Link>
             </Button>
           </div>
         ))}

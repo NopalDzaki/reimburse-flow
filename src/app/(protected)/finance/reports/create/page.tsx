@@ -1,4 +1,7 @@
-import { SharedCreateReportPage } from "@/components/shared/create-report-page"
-export default function FinanceCreateReportPage() {
-  return <SharedCreateReportPage role="finance" />
+"use client"
+
+import { SharedReportCreate } from "@/components/shared/report-create"
+
+export default function FinanceReportCreatePage() {
+  return <SharedReportCreate role="finance" backHref="/finance/reports" />
 }
