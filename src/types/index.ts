@@ -73,6 +73,14 @@ export interface ActivityLog {
   entityType?: string;
 }
 
+export interface ReportReply {
+  id: string;
+  body: string;
+  userId: string;
+  createdAt: string;
+  isSystem?: boolean;
+}
+
 export interface Report {
   id: string;
   title: string;
@@ -86,6 +94,7 @@ export interface Report {
   responseNote?: string;
   attachment?: string;
   relatedReimbursementId?: string;
+  replies?: ReportReply[];
 }
 
 export interface NavItem {

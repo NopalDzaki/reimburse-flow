@@ -20,9 +20,9 @@ const statusMap: Record<StatusType, { label: string; dot: string; bg: string; te
   resolved:    { label: "Resolved",    dot: "bg-success",         bg: "bg-success/10", text: "text-success" },
   closed:      { label: "Closed",      dot: "bg-muted-foreground", bg: "bg-muted/60", text: "text-muted-foreground" },
   urgent:      { label: "Urgent",      dot: "bg-destructive",     bg: "bg-destructive/10", text: "text-destructive" },
-  high:        { label: "High",        dot: "bg-warning",         bg: "bg-warning/10", text: "text-warning" },
-  medium:      { label: "Medium",      dot: "bg-info",            bg: "bg-info/10", text: "text-info" },
-  low:         { label: "Low",         dot: "bg-muted-foreground", bg: "bg-muted/60", text: "text-muted-foreground" },
+  high:        { label: "High",        dot: "bg-destructive",     bg: "bg-destructive/10", text: "text-destructive" },
+  medium:      { label: "Medium",      dot: "bg-warning",         bg: "bg-warning/10", text: "text-warning" },
+  low:         { label: "Low",         dot: "bg-success",         bg: "bg-success/10", text: "text-success" },
 }
 
 interface StatusBadgeProps {

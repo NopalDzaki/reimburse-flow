@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { Filter, MoreVertical, MessageSquare } from "lucide-react"
+import { Filter, MoreVertical, ExternalLink } from "lucide-react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -15,21 +16,15 @@ export default function TicketDashboardPage() {
   const { reports, updateReport } = useReports()
 
   const handleReply = (id: string) => {
-    const reply = window.prompt("Enter your response to the user:");
-    if (!reply) return;
-    
-    updateReport(id, { 
-      responseNote: reply, 
-      status: "resolved" 
-    })
-    toast.success(`Ticket ${id} resolved with response.`)
+    // legacy inline reply removed; action moved to detail page.
   }
 
   const getPriorityBadge = (p: string) => {
-    switch(p) {
-      case 'Urgent': return <Badge variant="destructive">{p}</Badge>;
-      case 'High': return <Badge variant="warning">{p}</Badge>;
-      case 'Medium': return <Badge variant="info">{p}</Badge>;
+    switch(p.toLowerCase()) {
+      case 'urgent':
+      case 'high': return <Badge variant="destructive">{p}</Badge>;
+      case 'medium': return <Badge variant="warning">{p}</Badge>;
+      case 'low': return <Badge variant="success">{p}</Badge>;
       default: return <Badge variant="secondary">{p}</Badge>;
     }
   }
@@ -106,18 +101,18 @@ export default function TicketDashboardPage() {
                       {getStatusBadge(ticket.status)}
                     </td>
                     <td className="px-6 py-4 text-right">
-                      {ticket.status !== 'resolved' ? (
-                        <div className="flex items-center justify-end gap-2">
-                          <Button variant="ghost" size="sm" className="hidden group-hover:flex items-center gap-1.5 text-primary" onClick={() => handleReply(ticket.id)}>
-                            <MessageSquare className="h-4 w-4" /> Reply & Resolve
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+                      <div className="flex items-center justify-end gap-2">
+                        <Button variant="ghost" size="sm" className="hidden group-hover:flex items-center gap-1.5 text-primary" asChild>
+                          <Link href={`/superadmin/tickets/${ticket.id}`}>
+                            <ExternalLink className="h-4 w-4" /> View Details
+                          </Link>
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" asChild>
+                          <Link href={`/superadmin/tickets/${ticket.id}`}>
                             <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">Resolved</span>
-                      )}
+                          </Link>
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -12,6 +12,7 @@ interface ReportContextValue {
   createReport: (data: CreateReportInput) => void;
   updateReport: (id: string, updates: Partial<Report>) => void;
   getById: (id: string) => Report | undefined;
+  addReply: (id: string, body: string, userId: string) => void;
 }
 
 const ReportContext = createContext<ReportContextValue | undefined>(undefined);
@@ -37,7 +38,27 @@ export function ReportProvider({ children }: { children: React.ReactNode }) {
 
   const getById: ReportContextValue["getById"] = (id) => reports.find((r) => r.id === id);
 
-  const value: ReportContextValue = { reports, createReport, updateReport, getById };
+  const addReply: ReportContextValue["addReply"] = (id, body, userId) => {
+    setReports((prev) => prev.map((item) => {
+      if (item.id === id) {
+        const newReply = {
+          id: `MSG-${Date.now()}`,
+          body,
+          userId,
+          createdAt: new Date().toISOString()
+        };
+        return {
+          ...item,
+          replies: [...(item.replies || []), newReply],
+          status: "resolved", // Assuming superadmin reply resolves the generic ticket for now
+          responseNote: body
+        };
+      }
+      return item;
+    }));
+  };
+
+  const value: ReportContextValue = { reports, createReport, updateReport, getById, addReply };
 
   return <ReportContext.Provider value={value}>{children}</ReportContext.Provider>;
 }
