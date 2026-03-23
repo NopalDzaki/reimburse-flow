@@ -6,26 +6,41 @@ import { EmptyState } from "@/components/shared/empty-state"
 import { Button } from "@/components/ui/button"
 import { Activity, Filter, Download } from "lucide-react"
 
-const PAYMENTS_LOG = [
-  { id: "TXN-90210", user: "Alex Sterling", category: "Travel & Lodging", amount: "$1,240.00", date: "Jun 12, 2023", status: "paid" as const, bank: "Chase •••• 9012" },
-  { id: "TXN-88421", user: "Morgan Lane", category: "Client Dinner", amount: "$432.50", date: "Jun 12, 2023", status: "paid" as const, bank: "BofA •••• 4421" },
-  { id: "TXN-77612", user: "Jordan Wells", category: "SaaS Subs", amount: "$2,100.00", date: "Jun 11, 2023", status: "paid" as const, bank: "WFargo •••• 1182" },
-  { id: "TXN-68210", user: "Riley North", category: "Logistics", amount: "$890.00", date: "Jun 10, 2023", status: "paid" as const, bank: "Citi •••• 3030" },
-]
+import { useReimbursements } from "@/context/reimbursement-context"
+import { formatCurrencyIDR, formatDateID, exportToCSV } from "@/lib/utils"
+import { toast } from "sonner"
 
 export default function FinanceActivityPage() {
+  const { reimbursements } = useReimbursements()
+  const paidClaims = reimbursements.filter(r => r.status === "paid" || r.paidAt)
+
+  const handleExport = () => {
+    exportToCSV(paidClaims.map(r => ({
+      ClaimID: r.id,
+      Recipient: r.accountHolderName,
+      Category: r.category,
+      BankAccount: `${r.bankName} - ${r.accountNumber}`,
+      Amount: r.amount,
+      Date: r.paidAt ? formatDateID(r.paidAt) : formatDateID(r.submittedAt),
+      Status: r.status
+    })), "finance_activity.csv")
+    toast.success("Activity log exported to CSV")
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Activity Log"
         description="History of all processed payments."
         actions={
-          <Button variant="outline" size="sm" className="gap-2"><Download className="h-4 w-4" /> Export CSV</Button>
+          <Button variant="outline" size="sm" className="gap-2" onClick={handleExport}>
+            <Download className="h-4 w-4" /> Export CSV
+          </Button>
         }
       />
-      <Button variant="outline" size="sm" className="gap-2"><Filter className="h-4 w-4" /> Filter</Button>
+      <Button variant="outline" size="sm" className="gap-2" disabled><Filter className="h-4 w-4" /> Filter</Button>
 
-      {PAYMENTS_LOG.length === 0 ? (
+      {paidClaims.length === 0 ? (
         <EmptyState icon={<Activity className="h-7 w-7" />} title="No payment history" description="Processed payments will appear here." />
       ) : (
         <div className="rounded-xl border border-border/50 bg-card overflow-hidden shadow-sm">
@@ -42,14 +57,14 @@ export default function FinanceActivityPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/30">
-              {PAYMENTS_LOG.map((p) => (
+              {paidClaims.map((p) => (
                 <tr key={p.id} className="hover:bg-muted/20 transition-colors">
                   <td className="px-6 py-4 font-mono text-xs text-muted-foreground">{p.id}</td>
-                  <td className="px-6 py-4 font-medium text-foreground">{p.user}</td>
+                  <td className="px-6 py-4 font-medium text-foreground">{p.accountHolderName}</td>
                   <td className="px-6 py-4 text-muted-foreground">{p.category}</td>
-                  <td className="px-6 py-4 text-muted-foreground text-xs">{p.bank}</td>
-                  <td className="px-6 py-4 text-right font-bold text-foreground">{p.amount}</td>
-                  <td className="px-6 py-4 text-muted-foreground text-xs">{p.date}</td>
+                  <td className="px-6 py-4 text-muted-foreground text-xs">{p.bankName} •••• {p.accountNumber.slice(-4)}</td>
+                  <td className="px-6 py-4 text-right font-bold text-foreground">{formatCurrencyIDR(p.amount)}</td>
+                  <td className="px-6 py-4 text-muted-foreground text-xs">{p.paidAt ? formatDateID(p.paidAt) : formatDateID(p.submittedAt)}</td>
                   <td className="px-6 py-4"><StatusBadge status={p.status} /></td>
                 </tr>
               ))}

@@ -24,7 +24,7 @@ export function SharedReportsPage({ role }: SharedReportsPageProps) {
   // We'll show their own submitted tickets unless they have an elevated view (superadmin sees all).
   const viewableReports = role === "superadmin" 
     ? reports 
-    : reports.filter(r => r.submittedBy === user?.id)
+    : reports.filter(r => r.createdBy === user?.id)
 
   const createHref = `/${role}/reports/create`
   const getDetailHref = (id: string) => `/${role}/reports/${id}` // superadmin might use support, let's assume /reports for now unless overridden

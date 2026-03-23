@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Filter, Download, Clock3, ShieldCheck, ArrowRight, Search } from "lucide-react"
 import { useReimbursements } from "@/context/reimbursement-context"
-import { formatCurrencyIDR, getRelativeTime } from "@/lib/utils"
+import { exportToCSV, formatCurrencyIDR, getRelativeTime, formatDateID } from "@/lib/utils"
 import { toast } from "sonner"
 
 export default function FinancePaymentsPage() {
@@ -32,11 +32,21 @@ export default function FinancePaymentsPage() {
         description="Approve, schedule, and release reimbursements with audit-ready context."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="gap-2" onClick={() => toast.info("Advanced filters coming soon")}>
+            <Button variant="outline" size="sm" className="gap-2" disabled>
               <Filter className="h-4 w-4" />
               Filters
             </Button>
-            <Button variant="secondary" size="sm" className="gap-2" onClick={() => toast.success("Exporting payment queue to CSV...")}>
+            <Button variant="secondary" size="sm" className="gap-2" onClick={() => {
+              exportToCSV(paymentQueue.map(r => ({
+                ID: r.id,
+                Recipient: r.accountHolderName,
+                Category: r.category,
+                Amount: r.amount,
+                Status: r.status,
+                Bank: `${r.bankName} - ${r.accountNumber}`
+              })), "payment_queue.csv");
+              toast.success("Payment queue exported to CSV");
+            }}>
               <Download className="h-4 w-4" />
               Export CSV
             </Button>
@@ -96,8 +106,7 @@ export default function FinancePaymentsPage() {
                       <td className="px-6 py-4 text-right font-semibold text-foreground">{formatCurrencyIDR(item.amount)}</td>
                       <td className="px-6 py-4"><StatusBadge status={item.status} /></td>
                       <td className="px-6 py-4 text-right space-x-2">
-                        <Button asChild variant="outline" size="sm"><Link href={`/finance/payments/${item.id}`}>Details</Link></Button>
-                        <Button asChild variant="secondary" size="sm"><Link href={`/finance/payments/${item.id}`}>Issue</Link></Button>
+                        <Button asChild variant="secondary" size="sm"><Link href={`/finance/payments/${item.id}`}>Process Release</Link></Button>
                       </td>
                     </tr>
                   ))}
@@ -132,9 +141,8 @@ export default function FinancePaymentsPage() {
                   </div>
                   <span className="text-xl font-heading font-bold text-foreground">{formatCurrencyIDR(item.amount)}</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button asChild variant="outline" size="sm"><Link href={`/finance/payments/${item.id}`}>Details</Link></Button>
-                  <Button asChild variant="secondary" size="sm"><Link href={`/finance/payments/${item.id}`}>Issue</Link></Button>
+                <div className="flex gap-2">
+                  <Button asChild variant="secondary" size="sm" className="w-full"><Link href={`/finance/payments/${item.id}`}>Process Release</Link></Button>
                 </div>
               </div>
             ))}
@@ -167,11 +175,9 @@ export default function FinancePaymentsPage() {
                 <span>Same-day cutoff</span>
                 <Badge variant="outline" className="rounded-full">5:00 PM</Badge>
               </div>
-              <Button asChild variant="outline" size="sm" className="w-full gap-2 mt-2">
-                <Link href="/finance/settings">
-                  <ShieldCheck className="h-4 w-4" />
-                  View Controls
-                </Link>
+              <Button variant="outline" size="sm" className="w-full gap-2 mt-2" disabled>
+                <ShieldCheck className="h-4 w-4" />
+                View Controls
               </Button>
             </CardContent>
           </Card>
@@ -196,7 +202,7 @@ export default function FinancePaymentsPage() {
                   </div>
                 </div>
               ))}
-              <Link href="/finance/dashboard" className="flex items-center gap-1 text-sm font-semibold text-primary mt-2 group">
+              <Link href="/finance/activity" className="flex items-center gap-1 text-sm font-semibold text-primary mt-2 group">
                 <span className="group-hover:underline">View activity log</span> <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </CardContent>

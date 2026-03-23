@@ -35,6 +35,33 @@ export default function SubmitClaimPage() {
   const { user } = useAuth()
   const { addNotification } = useNotifications()
 
+  // Mock file upload state
+  const [receiptFile, setReceiptFile] = React.useState<File | null>(null)
+  const [receiptPreview, setReceiptPreview] = React.useState<string | null>(null)
+  const [isDragging, setIsDragging] = React.useState(false)
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+  const handleDragLeave = () => setIsDragging(false)
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const file = e.dataTransfer.files?.[0]
+    if (file) {
+      setReceiptFile(file)
+      setReceiptPreview(URL.createObjectURL(file))
+    }
+  }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setReceiptFile(file)
+      setReceiptPreview(URL.createObjectURL(file))
+    }
+  }
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ClaimFormValues>({
     resolver: zodResolver(claimSchema),
     defaultValues: {
@@ -58,10 +85,11 @@ export default function SubmitClaimPage() {
       category: data.category,
       transactionDate: data.transactionDate,
       submittedBy: user?.id ?? "unknown",
+      submittedByName: user?.name ?? "User",
       bankName: "Default Bank",
       accountNumber: "0000000000",
       accountHolderName: user?.name ?? "User",
-      receiptImage: "dummy.jpg"
+      receiptImage: receiptPreview || "dummy.jpg" // Storing local object URL for session mock
     })
 
     addNotification({
@@ -140,14 +168,36 @@ export default function SubmitClaimPage() {
 
             <div className="space-y-3">
               <Label>Receipt Attachment</Label>
-              <div className="rounded-xl border-2 border-dashed border-border p-12 flex flex-col items-center justify-center text-center hover:bg-muted/50 transition-colors cursor-pointer group">
-                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <UploadCloud className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-medium mb-1">Click to upload or drag and drop</h3>
-                <p className="text-sm text-muted-foreground mb-4">PDF, JPG or PNG (max. 10MB)</p>
-                <Input type="file" className="hidden" id="receipt" {...register("receipt")} />
-                <Button type="button" variant="secondary" size="sm" onClick={() => document.getElementById('receipt')?.click()}>Browse Files</Button>
+              <div 
+                className={`rounded-xl border-2 border-dashed p-12 flex flex-col items-center justify-center text-center transition-colors cursor-pointer group ${isDragging ? "border-primary bg-primary/5" : "border-border hover:bg-muted/50"}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => document.getElementById('receipt')?.click()}
+              >
+                {receiptPreview ? (
+                  <div className="flex flex-col items-center">
+                    <div className="h-20 w-20 rounded-lg overflow-hidden border border-border mb-3 relative">
+                      {receiptFile?.type.includes('image') ? (
+                         <img src={receiptPreview} alt="Preview" className="w-full h-full object-cover" />
+                      ) : (
+                         <div className="w-full h-full bg-muted flex items-center justify-center text-xs font-medium text-muted-foreground uppercase">{receiptFile?.name.split('.').pop() || 'DOC'}</div>
+                      )}
+                    </div>
+                    <p className="font-medium text-sm line-clamp-1 max-w-[200px]">{receiptFile?.name}</p>
+                    <p className="text-xs text-muted-foreground mt-1">Click to change file</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <UploadCloud className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="font-medium mb-1">Click to upload or drag and drop</h3>
+                    <p className="text-sm text-muted-foreground mb-4">PDF, JPG or PNG (max. 10MB)</p>
+                    <Button type="button" variant="secondary" size="sm" onClick={(e) => { e.stopPropagation(); document.getElementById('receipt')?.click() }}>Browse Files</Button>
+                  </>
+                )}
+                <Input type="file" className="hidden" id="receipt" accept="image/png, image/jpeg, application/pdf" onChange={handleFileChange} />
               </div>
             </div>
           </CardContent>

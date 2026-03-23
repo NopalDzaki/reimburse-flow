@@ -71,15 +71,22 @@ export default function AdminReviewDetailPage() {
   };
 
   const handleReject = () => {
+    const reason = window.prompt("Enter reason for rejection:");
+    if (reason === null) return;
+    if (reason.trim() === "") {
+      toast.error("Rejection reason is required");
+      return;
+    }
+
     rejectReimbursement(
       id,
       user?.name ?? "Admin",
-      "Ditolak admin karena tidak sesuai kebijakan",
+      reason
     );
     addActivity({
       type: "rejection",
       title: "Ditolak admin",
-      description: `${user?.name} menolak pengajuan ${reimbursement.title}`,
+      description: `${user?.name} menolak pengajuan ${reimbursement.title} dengan alasan: ${reason}`,
       actorName: user?.name,
       relatedEntityId: id,
       entityType: "reimbursement",

@@ -29,10 +29,10 @@ export default function AdminReviewPage() {
         description="Pending claims awaiting your approval decision."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="gap-2" onClick={() => toast.info("Advanced filters coming soon")}>
+            <Button variant="outline" size="sm" className="gap-2" disabled>
               <Filter className="h-4 w-4" /> Filter
             </Button>
-            <Button variant="default" size="sm" onClick={() => toast.info("Select claims to batch review")}>
+            <Button variant="default" size="sm" disabled>
               Batch Review
             </Button>
           </div>

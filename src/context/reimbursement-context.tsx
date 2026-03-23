@@ -20,7 +20,7 @@ type CreateReimbursementInput = Omit<
 
 interface ReimbursementContextValue {
   reimbursements: Reimbursement[];
-  createReimbursement: (data: CreateReimbursementInput) => void;
+  createReimbursement: (data: CreateReimbursementInput) => Reimbursement;
   updateReimbursement: (id: string, updates: Partial<Reimbursement>) => void;
   addHistory: (id: string, item: ReimbursementHistoryItem) => void;
   approveReimbursement: (id: string, actorName: string, note?: string) => void;
@@ -57,6 +57,7 @@ export function ReimbursementProvider({ children }: { children: React.ReactNode 
     };
 
     setReimbursements((prev) => [payload, ...prev]);
+    return payload;
   };
 
   const updateReimbursement: ReimbursementContextValue["updateReimbursement"] = (id, updates) => {

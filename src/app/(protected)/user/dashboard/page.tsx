@@ -13,7 +13,7 @@ import { MetricChartCard } from "@/components/shared/metric-chart-card"
 import { TimelineStatus } from "@/components/shared/timeline-status"
 import { ActivityFeed } from "@/components/shared/activity-feed"
 import { Card, CardContent } from "@/components/ui/card"
-import { formatCurrencyIDR, formatDateID, getRelativeTime } from "@/lib/utils"
+import { exportToCSV, formatCurrencyIDR, formatDateID, getRelativeTime } from "@/lib/utils"
 import Link from "next/link"
 import { toast } from "sonner"
 
@@ -98,7 +98,7 @@ export default function UserDashboard() {
                 </div>
               </div>
               <Button variant="secondary" className="w-full mt-4" asChild>
-                <Link href={`/user/history`}>View Details</Link>
+                <Link href={`/user/history/${activeSubmission.id}`}>View Details</Link>
               </Button>
             </div>
           </div>
@@ -175,7 +175,18 @@ export default function UserDashboard() {
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-heading font-semibold">Recent Claims</h3>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="gap-2" onClick={() => toast.success("Exporting claims data...")}>
+                <Button variant="outline" size="sm" className="gap-2" onClick={() => {
+                  exportToCSV(myReimbursements.map(r => ({
+                    ID: r.id,
+                    Title: r.title,
+                    Category: r.category,
+                    Amount: r.amount,
+                    Status: r.status,
+                    TransactionDate: r.transactionDate,
+                    SubmittedAt: r.submittedAt
+                  })), "my_claims.csv");
+                  toast.success("Claims exported to CSV");
+                }}>
                   <Download className="h-4 w-4" /> Export
                 </Button>
                 <Button variant="secondary" size="sm" asChild>
@@ -209,7 +220,7 @@ export default function UserDashboard() {
                       <td className="px-4 py-3"><StatusBadge status={claim.status} /></td>
                       <td className="px-4 py-3 text-right">
                         <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-                          <Link href={`/user/history`}>
+                          <Link href={`/user/history/${claim.id}`}>
                             <Eye className="h-4 w-4 text-muted-foreground" />
                           </Link>
                         </Button>
@@ -235,7 +246,7 @@ export default function UserDashboard() {
                     <span className="text-lg font-heading font-semibold">{formatCurrencyIDR(claim.amount)}</span>
                   </div>
                   <Button variant="secondary" size="sm" className="w-full gap-2" asChild>
-                    <Link href={`/user/history`}>
+                    <Link href={`/user/history/${claim.id}`}>
                       <Eye className="h-4 w-4" /> View Details
                     </Link>
                   </Button>

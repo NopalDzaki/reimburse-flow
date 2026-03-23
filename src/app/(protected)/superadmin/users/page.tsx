@@ -1,15 +1,13 @@
+"use client";
+
 import * as React from "react"
 import { PageHeader } from "@/components/shared/page-header"
 import { Button } from "@/components/ui/button"
 import { Search, Filter, MoreVertical, UserPlus } from "lucide-react"
 
-const USERS = [
-  { id: 1, name: "Jordan Devlin", email: "jordan@acme.corp", role: "Admin", dept: "Engineering", status: "Active", lastLogin: "Today, 09:42 AM" },
-  { id: 2, name: "Sarah Chen", email: "s.chen@fintech.io", role: "User", dept: "Marketing", status: "Active", lastLogin: "Yesterday" },
-  { id: 3, name: "Marcus Knight", email: "knight@reimburse.me", role: "Finance", dept: "Finance", status: "Active", lastLogin: "3 days ago" },
-  { id: 4, name: "Priya Singh", email: "priya@acme.corp", role: "User", dept: "Design", status: "Inactive", lastLogin: "Oct 10, 2023" },
-  { id: 5, name: "Tom Walsh", email: "t.walsh@reimburse.me", role: "Admin", dept: "Operations", status: "Active", lastLogin: "Oct 12, 2023" },
-]
+import { useUsers } from "@/context/user-context"
+import { getRelativeTime } from "@/lib/utils"
+import { toast } from "sonner"
 
 const roleColors: Record<string, string> = {
   Admin: "bg-warning/10 text-warning",
@@ -19,6 +17,16 @@ const roleColors: Record<string, string> = {
 }
 
 export default function SuperadminUsersPageFull() {
+  const { users } = useUsers()
+  const [search, setSearch] = React.useState("")
+
+  const filteredUsers = users.filter(u => 
+    search === "" || 
+    u.name.toLowerCase().includes(search.toLowerCase()) || 
+    u.email.toLowerCase().includes(search.toLowerCase()) || 
+    u.role.toLowerCase().includes(search.toLowerCase())
+  )
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -34,9 +42,14 @@ export default function SuperadminUsersPageFull() {
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative w-full sm:max-w-xs">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <input placeholder="Search users…" className="h-9 w-full rounded-md border border-input bg-transparent pl-9 pr-4 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+          <input 
+            placeholder="Search users…" 
+            className="h-9 w-full rounded-md border border-input bg-transparent pl-9 pr-4 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" 
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
-        <Button variant="outline" size="sm" className="gap-2 shrink-0"><Filter className="h-4 w-4" /> Filter by Role</Button>
+        <Button variant="outline" size="sm" className="gap-2 shrink-0" disabled><Filter className="h-4 w-4" /> Filter by Role</Button>
       </div>
 
       <div className="rounded-xl border border-border/50 bg-card overflow-hidden shadow-sm">
@@ -52,11 +65,11 @@ export default function SuperadminUsersPageFull() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border/30">
-            {USERS.map((u) => (
+            {filteredUsers.map((u) => (
               <tr key={u.id} className="hover:bg-muted/20 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-full bg-card border border-border flex items-center justify-center text-xs font-bold text-foreground">
+                    <div className="h-9 w-9 rounded-full bg-card border border-border flex items-center justify-center text-xs font-bold text-foreground uppercase">
                       {u.name.split(" ").map(n => n[0]).join("").substring(0,2)}
                     </div>
                     <div>
@@ -66,21 +79,28 @@ export default function SuperadminUsersPageFull() {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`px-2.5 py-1 rounded-sm text-xs font-semibold ${roleColors[u.role] ?? "bg-muted text-muted-foreground"}`}>{u.role}</span>
+                  <span className={`px-2.5 py-1 rounded-sm text-xs font-semibold capitalize ${roleColors[u.role.charAt(0).toUpperCase() + u.role.slice(1)] ?? roleColors.User}`}>{u.role}</span>
                 </td>
-                <td className="px-6 py-4 text-muted-foreground">{u.dept}</td>
+                <td className="px-6 py-4 text-muted-foreground">-</td>
                 <td className="px-6 py-4">
-                  <span className={`flex items-center gap-1.5 text-xs font-medium ${u.status === "Active" ? "text-success" : "text-muted-foreground"}`}>
-                    <span className={`h-1.5 w-1.5 rounded-full ${u.status === "Active" ? "bg-success" : "bg-muted-foreground"}`} />
-                    {u.status}
+                  <span className={`flex items-center gap-1.5 text-xs font-medium ${u.isActive ? "text-success" : "text-muted-foreground"}`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${u.isActive ? "bg-success" : "bg-muted-foreground"}`} />
+                    {u.isActive ? "Active" : "Inactive"}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-muted-foreground text-xs">{u.lastLogin}</td>
+                <td className="px-6 py-4 text-muted-foreground text-xs">{getRelativeTime(u.createdAt)}</td>
                 <td className="px-6 py-4">
-                  <Button variant="ghost" size="icon" className="h-8 w-8"><MoreVertical className="h-4 w-4 text-muted-foreground" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("User details coming soon")}><MoreVertical className="h-4 w-4 text-muted-foreground" /></Button>
                 </td>
               </tr>
             ))}
+            {filteredUsers.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-6 py-8 text-center text-muted-foreground">
+                  No users found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

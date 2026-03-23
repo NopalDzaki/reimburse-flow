@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useNotifications } from "@/context/notification-context"
 import { useAuth } from "@/context/auth-context"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { getRelativeTime } from "@/lib/utils"
 
@@ -21,6 +22,7 @@ interface TopbarProps {
 export function Topbar({ userName, userRole, avatarInitial }: TopbarProps) {
   const { notifications, unreadCount, markAsRead, clearAll } = useNotifications()
   const { logout } = useAuth()
+  const router = useRouter()
   
   const handleGlobalSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -127,7 +129,7 @@ export function Topbar({ userName, userRole, avatarInitial }: TopbarProps) {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => { logout(); toast.success("Logged out successfully"); }} className="cursor-pointer text-destructive focus:text-destructive">
+              <DropdownMenuItem onClick={() => { logout(); toast.success("Logged out successfully"); router.push("/login"); }} className="cursor-pointer text-destructive focus:text-destructive">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>

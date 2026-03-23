@@ -14,7 +14,7 @@ import { getRelativeTime } from "@/lib/utils"
 export default function UserReportsPage() {
   const { user } = useAuth()
   const { reports } = useReports()
-  const viewableReports = reports.filter(r => r.submittedBy === user?.id)
+  const viewableReports = reports.filter(r => r.createdBy === user?.id)
 
   return (
     <div className="space-y-6">

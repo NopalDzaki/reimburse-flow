@@ -4,7 +4,8 @@ import { useUsers } from "@/context/user-context"
 import { useReports } from "@/context/report-context"
 import { useActivity } from "@/context/activity-context"
 import { useReimbursements } from "@/context/reimbursement-context"
-import { getRelativeTime } from "@/lib/utils"
+import { getRelativeTime, formatDateID } from "@/lib/utils"
+import Link from "next/link"
 
 export default function SuperadminDashboardPage() {
   const { users } = useUsers()
@@ -98,7 +99,7 @@ export default function SuperadminDashboardPage() {
           <div className="rounded-xl border border-border/50 bg-card p-6 shadow-sm h-full max-h-[460px] overflow-hidden flex flex-col">
             <div className="flex justify-between items-center mb-6">
                <h3 className="text-lg font-heading font-semibold">User Directory</h3>
-               <span className="text-sm text-primary font-medium hover:underline cursor-pointer">View All</span>
+               <Link href="/superadmin/users" className="text-sm text-primary font-medium hover:underline cursor-pointer">View All</Link>
             </div>
             <div className="overflow-x-auto flex-1">
               <table className="w-full text-sm text-left">
@@ -118,7 +119,7 @@ export default function SuperadminDashboardPage() {
                           {u.role}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground text-right">{u.createdAt}</td>
+                      <td className="px-4 py-3 text-muted-foreground text-right">{formatDateID(u.createdAt)}</td>
                     </tr>
                   ))}
                 </tbody>
