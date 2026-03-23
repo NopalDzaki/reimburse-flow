@@ -99,7 +99,7 @@ export function SharedReportDetail({ id, role, backHref }: SharedReportDetailPro
       )}
 
       {/* Reply Box */}
-      {report.status !== "resolved" && report.status !== "closed" && (
+
         <div className="rounded-xl border border-border/50 bg-card p-4 shadow-sm space-y-3">
           <p className="text-sm font-medium text-foreground">Add Follow-up</p>
           <Textarea 
@@ -113,7 +113,6 @@ export function SharedReportDetail({ id, role, backHref }: SharedReportDetailPro
             <Button variant="default" size="sm" className="gap-2" onClick={handleReply}><Send className="h-4 w-4" /> Send Reply</Button>
           </div>
         </div>
-      )}
     </div>
   )
 }

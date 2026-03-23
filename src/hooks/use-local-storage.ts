@@ -3,23 +3,33 @@
 import { useEffect, useState } from "react";
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
-  const [value, setValue] = useState<T>(() => {
-    if (typeof window === "undefined") return initialValue;
-    const stored = window.localStorage.getItem(key);
-    if (!stored) return initialValue;
+  // Always initialize with initialValue to prevent hydration mismatch (SSR vs Client)
+  const [value, setValue] = useState<T>(initialValue);
+  const [mounted, setMounted] = useState(false);
 
-    try {
-      return JSON.parse(stored) as T;
-    } catch (e) {
-      console.error("Failed to parse localStorage", e);
-      return initialValue;
-    }
-  });
-
+  // Hydrate client-side state from local storage securely after first mount
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
+    setMounted(true);
+    try {
+      const stored = window.localStorage.getItem(key);
+      if (stored) {
+        setValue(JSON.parse(stored) as T);
+      }
+    } catch (e) {
+      console.error("Failed to parse localStorage on mount", e);
+    }
+  }, [key]);
+
+  // Keep localStorage perfectly synced on subsequent generic updates
+  useEffect(() => {
+    if (mounted) {
+      try {
+        window.localStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {
+        console.error("Failed to write to localStorage", e);
+      }
+    }
+  }, [key, value, mounted]);
 
   return [value, setValue] as const;
 }
