@@ -3,11 +3,24 @@
 import { createContext, useContext } from "react";
 import { mockReimbursements } from "@/data/mock-data";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import type { Reimbursement, ReimbursementHistoryItem, ReimbursementStatus } from "@/types";
+import type {
+  Reimbursement,
+  ReimbursementHistoryItem,
+  ReimbursementStatus,
+} from "@/types";
 
 type CreateReimbursementInput = Omit<
   Reimbursement,
-  "id" | "submittedAt" | "status" | "history" | "adminNote" | "financeNote" | "paidAt" | "reviewedAt" | "reviewedBy" | "paidBy"
+  | "id"
+  | "submittedAt"
+  | "status"
+  | "history"
+  | "adminNote"
+  | "financeNote"
+  | "paidAt"
+  | "reviewedAt"
+  | "reviewedBy"
+  | "paidBy"
 > & {
   status?: ReimbursementStatus;
   adminNote?: string;
@@ -35,94 +48,113 @@ interface ReimbursementContextValue {
   getById: (id: string) => Reimbursement | undefined;
 }
 
-const ReimbursementContext = createContext<ReimbursementContextValue | undefined>(undefined);
+const ReimbursementContext = createContext<
+  ReimbursementContextValue | undefined
+>(undefined);
 
-export function ReimbursementProvider({ children }: { children: React.ReactNode }) {
-  const [reimbursements, setReimbursements] = useLocalStorage<Reimbursement[]>("reimburse-reimbursements", mockReimbursements);
+export function ReimbursementProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [reimbursements, setReimbursements] = useLocalStorage<Reimbursement[]>(
+    "reimburse-reimbursements",
+    mockReimbursements,
+  );
 
-  const createReimbursement: ReimbursementContextValue["createReimbursement"] = (data) => {
-    const nextId = `RMB-${(reimbursements.length + 1).toString().padStart(4, "0")}`;
-    const submittedAt = new Date().toISOString();
-    const status: ReimbursementStatus = data.status ?? "submitted";
-    const history: ReimbursementHistoryItem[] = [
-      { status, createdAt: submittedAt, actorName: data.submittedByName },
-    ];
+  const createReimbursement: ReimbursementContextValue["createReimbursement"] =
+    (data) => {
+      const nextId = `RMB-${(reimbursements.length + 1).toString().padStart(4, "0")}`;
+      const submittedAt = new Date().toISOString();
+      const status: ReimbursementStatus = data.status ?? "submitted";
+      const history: ReimbursementHistoryItem[] = [
+        { status, createdAt: submittedAt, actorName: data.submittedByName },
+      ];
 
-    const payload: Reimbursement = {
-      id: nextId,
-      submittedAt,
-      status,
-      history,
-      ...data,
+      const payload: Reimbursement = {
+        id: nextId,
+        submittedAt,
+        status,
+        history,
+        ...data,
+      };
+
+      setReimbursements((prev) => [payload, ...prev]);
+      return payload;
     };
 
-    setReimbursements((prev) => [payload, ...prev]);
-    return payload;
-  };
-
-  const updateReimbursement: ReimbursementContextValue["updateReimbursement"] = (id, updates) => {
-    setReimbursements((prev) => prev.map((item) => (item.id === id ? { ...item, ...updates } : item)));
-  };
+  const updateReimbursement: ReimbursementContextValue["updateReimbursement"] =
+    (id, updates) => {
+      setReimbursements((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, ...updates } : item)),
+      );
+    };
 
   const addHistory: ReimbursementContextValue["addHistory"] = (id, item) => {
     setReimbursements((prev) =>
       prev.map((reimburse) =>
         reimburse.id === id
-          ? { ...reimburse, history: [...reimburse.history, item], status: item.status }
+          ? {
+              ...reimburse,
+              history: [...reimburse.history, item],
+              status: item.status,
+            }
           : reimburse,
       ),
     );
   };
 
-  const approveReimbursement: ReimbursementContextValue["approveReimbursement"] = (id, actorName, note) => {
-    const reviewedAt = new Date().toISOString();
-    setReimbursements((prev) =>
-      prev.map((item) => {
-        if (item.id !== id) return item;
-        return {
-          ...item,
-          status: "approved_admin",
-          adminNote: note,
-          reviewedAt,
-          reviewedBy: actorName,
-          history: [
-            ...item.history,
-            {
-              status: "approved_admin",
-              note,
-              actorName,
-              createdAt: reviewedAt,
-            },
-          ],
-        };
-      }),
-    );
-  };
+  const approveReimbursement: ReimbursementContextValue["approveReimbursement"] =
+    (id, actorName, note) => {
+      const reviewedAt = new Date().toISOString();
+      setReimbursements((prev) =>
+        prev.map((item) => {
+          if (item.id !== id) return item;
+          return {
+            ...item,
+            status: "approved_admin",
+            adminNote: note,
+            reviewedAt,
+            reviewedBy: actorName,
+            history: [
+              ...item.history,
+              {
+                status: "approved_admin",
+                note,
+                actorName,
+                createdAt: reviewedAt,
+              },
+            ],
+          };
+        }),
+      );
+    };
 
-  const rejectReimbursement: ReimbursementContextValue["rejectReimbursement"] = (id, actorName, reason) => {
-    const reviewedAt = new Date().toISOString();
-    setReimbursements((prev) =>
-      prev.map((item) => {
-        if (item.id !== id) return item;
-        return {
-          ...item,
-          status: "rejected_admin",
-          adminNote: reason,
-          reviewedAt,
-          reviewedBy: actorName,
-          history: [
-            ...item.history,
-            {
-              status: "rejected_admin",
-              note: reason,
-              actorName,
-              createdAt: reviewedAt,
-            },
-          ],
-        };
-      }),
-    );
-  };
+  const rejectReimbursement: ReimbursementContextValue["rejectReimbursement"] =
+    (id, actorName, reason) => {
+      const reviewedAt = new Date().toISOString();
+      setReimbursements((prev) =>
+        prev.map((item) => {
+          if (item.id !== id) return item;
+          return {
+            ...item,
+            status: "rejected_admin",
+            adminNote: reason,
+            reviewedAt,
+            reviewedBy: actorName,
+            history: [
+              ...item.history,
+              {
+                status: "rejected_admin",
+                note: reason,
+                actorName,
+                createdAt: reviewedAt,
+              },
+            ],
+          };
+        }),
+      );
+    };
 
   const markAsPaid: ReimbursementContextValue["markAsPaid"] = ({
     id,
@@ -131,7 +163,9 @@ export function ReimbursementProvider({ children }: { children: React.ReactNode 
     note,
     paymentProofImage,
   }) => {
-    const paidAt = transferDate ? new Date(transferDate).toISOString() : new Date().toISOString();
+    const paidAt = transferDate
+      ? new Date(transferDate).toISOString()
+      : new Date().toISOString();
     setReimbursements((prev) =>
       prev.map((item) => {
         if (item.id !== id) return item;
@@ -156,7 +190,8 @@ export function ReimbursementProvider({ children }: { children: React.ReactNode 
     );
   };
 
-  const getById: ReimbursementContextValue["getById"] = (id) => reimbursements.find((r) => r.id === id);
+  const getById: ReimbursementContextValue["getById"] = (id) =>
+    reimbursements.find((r) => r.id === id);
 
   const value: ReimbursementContextValue = {
     reimbursements,
@@ -169,11 +204,16 @@ export function ReimbursementProvider({ children }: { children: React.ReactNode 
     getById,
   };
 
-  return <ReimbursementContext.Provider value={value}>{children}</ReimbursementContext.Provider>;
+  return (
+    <ReimbursementContext.Provider value={value}>
+      {children}
+    </ReimbursementContext.Provider>
+  );
 }
 
 export function useReimbursements() {
   const ctx = useContext(ReimbursementContext);
-  if (!ctx) throw new Error("useReimbursements harus di dalam ReimbursementProvider");
+  if (!ctx)
+    throw new Error("useReimbursements harus di dalam ReimbursementProvider");
   return ctx;
 }

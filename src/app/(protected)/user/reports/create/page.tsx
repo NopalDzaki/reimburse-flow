@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { SharedReportCreate } from "@/components/shared/report-create"
+import { SharedReportCreate } from "@/components/shared/report-create";
 
 export default function UserReportCreatePage() {
-  return <SharedReportCreate role="user" backHref="/user/reports" />
+  return <SharedReportCreate role="user" backHref="/user/reports" />;
 }

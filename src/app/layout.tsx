@@ -26,10 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${inter.variable} ${jakarta.variable} antialiased min-h-screen bg-background text-foreground`}>
-        <Providers>
-          {children}
-        </Providers>
+      <body
+        suppressHydrationWarning
+        className={`${inter.variable} ${jakarta.variable} antialiased min-h-screen bg-background text-foreground`}
+      >
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

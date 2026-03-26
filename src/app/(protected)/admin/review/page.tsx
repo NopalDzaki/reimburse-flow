@@ -16,10 +16,12 @@ export default function AdminReviewPage() {
 
   const pendingClaims = reimbursements
     .filter((r) => r.status === "submitted")
-    .filter(r => 
-      search === "" || 
-      (r.accountHolderName && r.accountHolderName.toLowerCase().includes(search.toLowerCase())) || 
-      r.id.toLowerCase().includes(search.toLowerCase())
+    .filter(
+      (r) =>
+        search === "" ||
+        (r.accountHolderName &&
+          r.accountHolderName.toLowerCase().includes(search.toLowerCase())) ||
+        r.id.toLowerCase().includes(search.toLowerCase()),
     );
 
   return (
@@ -134,7 +136,9 @@ export default function AdminReviewPage() {
                   colSpan={6}
                   className="px-6 py-8 text-center text-muted-foreground"
                 >
-                  {search !== "" ? "No claims found matching your search." : "No claims pending review."}
+                  {search !== ""
+                    ? "No claims found matching your search."
+                    : "No claims pending review."}
                 </td>
               </tr>
             )}
@@ -185,7 +189,9 @@ export default function AdminReviewPage() {
         ))}
         {pendingClaims.length === 0 && (
           <div className="rounded-xl border border-border/50 bg-card p-6 text-center text-muted-foreground text-sm shadow-sm">
-            {search !== "" ? "No claims found matching your search." : "No claims pending review."}
+            {search !== ""
+              ? "No claims found matching your search."
+              : "No claims pending review."}
           </div>
         )}
       </div>

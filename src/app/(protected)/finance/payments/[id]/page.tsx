@@ -28,7 +28,7 @@ export default function FinancePaymentDetailPage() {
 
   const reimbursement = getById(id);
 
-  if (!reimbursement) {
+  if (!id || !reimbursement) {
     return (
       <div className="space-y-6">
         <Button variant="ghost" asChild className="-ml-4 gap-2 text-muted-foreground hover:text-foreground">

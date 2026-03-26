@@ -30,11 +30,11 @@ export default function UserDashboard() {
   const { reports } = useReports()
 
   const myReimbursements = reimbursements
-    .filter((r) => r.submittedBy === (user?.id ?? "u-1"))
+    .filter((r) => r.submittedBy === user?.id)
     .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
   
   const myReports = reports
-    .filter((r) => r.createdBy === (user?.id ?? "u-1"))
+    .filter((r) => r.createdBy === user?.id)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   const activeSubmission = myReimbursements.find((item) => item.status !== "paid") ?? myReimbursements[0];

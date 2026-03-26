@@ -17,32 +17,47 @@ export interface Notification {
 interface NotificationContextValue {
   notifications: Notification[];
   unreadCount: number;
-  addNotification: (notification: Omit<Notification, "id" | "read" | "createdAt">) => void;
+  addNotification: (
+    notification: Omit<Notification, "id" | "read" | "createdAt">,
+  ) => void;
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;
   clearAll: () => void;
 }
 
-const NotificationContext = createContext<NotificationContextValue | undefined>(undefined);
+const NotificationContext = createContext<NotificationContextValue | undefined>(
+  undefined,
+);
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-  const [notifications, setNotifications] = useLocalStorage<Notification[]>("reimburse-notifications", []);
+  const [notifications, setNotifications] = useLocalStorage<Notification[]>(
+    "reimburse-notifications",
+    [],
+  );
 
-  const addNotification = useCallback((notification: Omit<Notification, "id" | "read" | "createdAt">) => {
-    setNotifications((prev) => [
-      {
-        ...notification,
-        id: crypto.randomUUID(),
-        read: false,
-        createdAt: new Date().toISOString(),
-      },
-      ...prev,
-    ]);
-  }, [setNotifications]);
+  const addNotification = useCallback(
+    (notification: Omit<Notification, "id" | "read" | "createdAt">) => {
+      setNotifications((prev) => [
+        {
+          ...notification,
+          id: crypto.randomUUID(),
+          read: false,
+          createdAt: new Date().toISOString(),
+        },
+        ...prev,
+      ]);
+    },
+    [setNotifications],
+  );
 
-  const markAsRead = useCallback((id: string) => {
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
-  }, [setNotifications]);
+  const markAsRead = useCallback(
+    (id: string) => {
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+      );
+    },
+    [setNotifications],
+  );
 
   const markAllAsRead = useCallback(() => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
@@ -73,7 +88,9 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 export function useNotifications() {
   const context = useContext(NotificationContext);
   if (!context) {
-    throw new Error("useNotifications must be used within a NotificationProvider");
+    throw new Error(
+      "useNotifications must be used within a NotificationProvider",
+    );
   }
   return context;
 }

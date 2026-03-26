@@ -27,7 +27,7 @@ export default function AdminReviewDetailPage() {
 
   const reimbursement = getById(id);
 
-  if (!reimbursement) {
+  if (!id || !reimbursement) {
     return (
       <div className="space-y-6">
         <Button
@@ -102,7 +102,7 @@ export default function AdminReviewDetailPage() {
 
   const actions =
     reimbursement.status === "submitted" ? (
-      <>
+      <div className="flex w-full justify-between items-center gap-4 mt-4">
         <Button
           variant="outline"
           className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/20"
@@ -110,10 +110,10 @@ export default function AdminReviewDetailPage() {
         >
           <XCircle className="h-4 w-4 mr-2" /> Reject Claim
         </Button>
-        <Button variant="secondary" onClick={handleApprove}>
+        <Button variant="secondary" onClick={handleApprove} className="px-8">
           <CheckCircle2 className="h-4 w-4 mr-2" /> Approve Claim
         </Button>
-      </>
+      </div>
     ) : undefined;
 
   return (
