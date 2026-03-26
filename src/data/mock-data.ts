@@ -107,7 +107,12 @@ const reimbursementBase: Omit<Reimbursement, "id">[] = [
     paidBy: undefined,
     history: [
       { status: "submitted", createdAt: new Date().toISOString() },
-      { status: "approved_admin", note: "Disetujui", actorName: "Raka Pratama", createdAt: new Date().toISOString() },
+      {
+        status: "approved_admin",
+        note: "Disetujui",
+        actorName: "Raka Pratama",
+        createdAt: new Date().toISOString(),
+      },
     ],
   },
   {
@@ -145,7 +150,12 @@ const reimbursementBase: Omit<Reimbursement, "id">[] = [
     adminNote: "Sudah tersedia di gudang, mohon cek stok",
     history: [
       { status: "submitted", createdAt: new Date().toISOString() },
-      { status: "rejected_admin", note: "Barang tersedia", actorName: "Citra Laras", createdAt: new Date().toISOString() },
+      {
+        status: "rejected_admin",
+        note: "Barang tersedia",
+        actorName: "Citra Laras",
+        createdAt: new Date().toISOString(),
+      },
     ],
   },
   {
@@ -172,8 +182,16 @@ const reimbursementBase: Omit<Reimbursement, "id">[] = [
     paymentProofImage: "/mock/transfer1.jpg",
     history: [
       { status: "submitted", createdAt: new Date().toISOString() },
-      { status: "approved_admin", actorName: "Citra Laras", createdAt: new Date().toISOString() },
-      { status: "paid", actorName: "Sari Wulandari", createdAt: new Date().toISOString() },
+      {
+        status: "approved_admin",
+        actorName: "Citra Laras",
+        createdAt: new Date().toISOString(),
+      },
+      {
+        status: "paid",
+        actorName: "Sari Wulandari",
+        createdAt: new Date().toISOString(),
+      },
     ],
   },
   {
@@ -196,7 +214,11 @@ const reimbursementBase: Omit<Reimbursement, "id">[] = [
     reviewedBy: "u-2",
     history: [
       { status: "submitted", createdAt: new Date().toISOString() },
-      { status: "approved_admin", actorName: "Raka Pratama", createdAt: new Date().toISOString() },
+      {
+        status: "approved_admin",
+        actorName: "Raka Pratama",
+        createdAt: new Date().toISOString(),
+      },
     ],
   },
   {
@@ -223,8 +245,16 @@ const reimbursementBase: Omit<Reimbursement, "id">[] = [
     paymentProofImage: "/mock/transfer2.jpg",
     history: [
       { status: "submitted", createdAt: new Date().toISOString() },
-      { status: "approved_admin", actorName: "Raka Pratama", createdAt: new Date().toISOString() },
-      { status: "paid", actorName: "Sari Wulandari", createdAt: new Date().toISOString() },
+      {
+        status: "approved_admin",
+        actorName: "Raka Pratama",
+        createdAt: new Date().toISOString(),
+      },
+      {
+        status: "paid",
+        actorName: "Sari Wulandari",
+        createdAt: new Date().toISOString(),
+      },
     ],
   },
   {
@@ -264,7 +294,11 @@ const reimbursementBase: Omit<Reimbursement, "id">[] = [
     reviewedBy: "u-7",
     history: [
       { status: "submitted", createdAt: new Date().toISOString() },
-      { status: "approved_admin", actorName: "Citra Laras", createdAt: new Date().toISOString() },
+      {
+        status: "approved_admin",
+        actorName: "Citra Laras",
+        createdAt: new Date().toISOString(),
+      },
     ],
   },
   {
@@ -291,8 +325,16 @@ const reimbursementBase: Omit<Reimbursement, "id">[] = [
     paymentProofImage: "/mock/transfer3.jpg",
     history: [
       { status: "submitted", createdAt: new Date().toISOString() },
-      { status: "approved_admin", actorName: "Raka Pratama", createdAt: new Date().toISOString() },
-      { status: "paid", actorName: "Sari Wulandari", createdAt: new Date().toISOString() },
+      {
+        status: "approved_admin",
+        actorName: "Raka Pratama",
+        createdAt: new Date().toISOString(),
+      },
+      {
+        status: "paid",
+        actorName: "Sari Wulandari",
+        createdAt: new Date().toISOString(),
+      },
     ],
   },
   {
@@ -315,15 +357,21 @@ const reimbursementBase: Omit<Reimbursement, "id">[] = [
     reviewedBy: "u-7",
     history: [
       { status: "submitted", createdAt: new Date().toISOString() },
-      { status: "rejected_admin", actorName: "Citra Laras", createdAt: new Date().toISOString() },
+      {
+        status: "rejected_admin",
+        actorName: "Citra Laras",
+        createdAt: new Date().toISOString(),
+      },
     ],
   },
 ];
 
-export const mockReimbursements: Reimbursement[] = reimbursementBase.map((item, idx) => ({
-  id: `RMB-${(idx + 1).toString().padStart(4, "0")}`,
-  ...item,
-}));
+export const mockReimbursements: Reimbursement[] = reimbursementBase.map(
+  (item, idx) => ({
+    id: `RMB-${(idx + 1).toString().padStart(4, "0")}`,
+    ...item,
+  }),
+);
 
 export const mockActivities: ActivityLog[] = [
   {

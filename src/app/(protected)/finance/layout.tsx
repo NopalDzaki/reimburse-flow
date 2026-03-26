@@ -1,10 +1,10 @@
-import * as React from "react"
-import { AppShell } from "@/components/layout/app-shell"
+import * as React from "react";
+import { AppShell } from "@/components/layout/app-shell";
 
 export default function FinanceLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <AppShell
@@ -16,5 +16,5 @@ export default function FinanceLayout({
     >
       {children}
     </AppShell>
-  )
+  );
 }

@@ -30,36 +30,42 @@
 
 From submission → review → approval → payout, everything is handled in one centralized platform with clear visibility for every role.
 
-> No more Excel chaos. No more “udah di-approve belum sih?” drama.
+> No more Excel chaos. No more drama.
 
 ---
 
 ## 🚀 Features
 
 ### 🔐 Smart Role System (RBAC)
+
 - User, Admin, Finance, Superadmin access
 - Isolated dashboards & permissions
 - Real workflow simulation
 
 ### 📊 Real-Time Tracking
+
 - Monitor claim status instantly
 - Clear progress from submission → payout
 
 ### 📈 Interactive Dashboard
+
 - Visual insights with Recharts
 - Activity monitoring per role
 
 ### 💼 Claim Workflow
+
 - Submit reimbursement
 - Review & approve system
 - Organized history tracking
 
 ### 🎨 Modern UI/UX
+
 - Clean, responsive layout
 - Built with Tailwind + Radix
 - Focused on usability, not just aesthetics
 
 ### 🌗 Theme System
+
 - Dark / Light mode
 - Consistent design system
 
@@ -67,15 +73,15 @@ From submission → review → approval → payout, everything is handled in one
 
 ## 🛠️ Tech Stack
 
-| Category       | Tech                        |
-|----------------|-----------------------------|
-| Framework      | Next.js 15 (App Router)     |
-| Language       | TypeScript                  |
-| Styling        | Tailwind CSS                |
-| UI System      | Radix UI / shadcn/ui        |
-| State          | React Context API           |
-| Charts         | Recharts                    |
-| Icons          | Lucide React                |
+| Category  | Tech                    |
+| --------- | ----------------------- |
+| Framework | Next.js 15 (App Router) |
+| Language  | TypeScript              |
+| Styling   | Tailwind CSS            |
+| UI System | Radix UI / shadcn/ui    |
+| State     | React Context API       |
+| Charts    | Recharts                |
+| Icons     | Lucide React            |
 
 ---
 
@@ -88,11 +94,13 @@ npm install
 ```
 
 ### Setup env
+
 ```bash
 cp .env.example .env.local
 ```
 
 ### Run app
+
 ```bash
 npm run dev
 ```
@@ -104,22 +112,27 @@ Open → http://localhost:3000
 ## ▶️ Usage
 
 ### 🔑 Auth
+
 - `/login`
 
 ### 👤 User
+
 - Dashboard → `/user/dashboard`
 - Submit → `/user/submit`
 - History → `/user/history`
 
 ### 🛠️ Admin
+
 - Dashboard → `/admin/dashboard`
 - Review → `/admin/review`
 
 ### 💰 Finance
+
 - Dashboard → `/finance/dashboard`
 - Payments → `/finance/payments`
 
 ### 🧠 Superadmin
+
 - Full system access & control
 
 ---
@@ -181,10 +194,10 @@ git push origin feature/your-feature
 ## 👤 Author
 
 **Naufal Dzaki**  
-https://github.com/nopaldzaki  
+https://github.com/nopaldzaki
 
 ---
 
 <p align="center">
-  Built with 💻, ☕, and questionable life choices
+  Built with 💻, ☕, 🩷
 </p>

@@ -78,11 +78,7 @@ export default function AdminReviewDetailPage() {
       return;
     }
 
-    rejectReimbursement(
-      id,
-      user?.name ?? "Admin",
-      reason
-    );
+    rejectReimbursement(id, user?.name ?? "Admin", reason);
     addActivity({
       type: "rejection",
       title: "Ditolak admin",

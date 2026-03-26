@@ -7,13 +7,20 @@ import type { ActivityLog } from "@/types";
 
 interface ActivityContextValue {
   activities: ActivityLog[];
-  addActivity: (activity: Omit<ActivityLog, "id" | "createdAt"> & { createdAt?: string }) => void;
+  addActivity: (
+    activity: Omit<ActivityLog, "id" | "createdAt"> & { createdAt?: string },
+  ) => void;
 }
 
-const ActivityContext = createContext<ActivityContextValue | undefined>(undefined);
+const ActivityContext = createContext<ActivityContextValue | undefined>(
+  undefined,
+);
 
 export function ActivityProvider({ children }: { children: React.ReactNode }) {
-  const [activities, setActivities] = useLocalStorage<ActivityLog[]>("reimburse-activities", mockActivities);
+  const [activities, setActivities] = useLocalStorage<ActivityLog[]>(
+    "reimburse-activities",
+    mockActivities,
+  );
 
   const addActivity: ActivityContextValue["addActivity"] = (activity) => {
     setActivities((prev) => [
@@ -28,7 +35,11 @@ export function ActivityProvider({ children }: { children: React.ReactNode }) {
 
   const value = { activities, addActivity };
 
-  return <ActivityContext.Provider value={value}>{children}</ActivityContext.Provider>;
+  return (
+    <ActivityContext.Provider value={value}>
+      {children}
+    </ActivityContext.Provider>
+  );
 }
 
 export function useActivity() {

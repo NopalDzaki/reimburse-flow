@@ -2,7 +2,11 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { formatDateID } from "@/lib/utils";
 import type { ReimbursementHistoryItem } from "@/types";
 
-export function TimelineStatus({ history }: { history: ReimbursementHistoryItem[] }) {
+export function TimelineStatus({
+  history,
+}: {
+  history: ReimbursementHistoryItem[];
+}) {
   return (
     <div className="relative space-y-4">
       <div className="absolute left-[11px] top-4 h-[calc(100%-32px)] w-px bg-border" />
@@ -13,11 +17,21 @@ export function TimelineStatus({ history }: { history: ReimbursementHistoryItem[
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <StatusBadge status={item.status} />
-                {item.actorName && <span className="text-sm font-medium text-muted-foreground">by {item.actorName}</span>}
+                {item.actorName && (
+                  <span className="text-sm font-medium text-muted-foreground">
+                    by {item.actorName}
+                  </span>
+                )}
               </div>
-              <p className="text-xs text-muted-foreground font-medium">{formatDateID(item.createdAt)}</p>
+              <p className="text-xs text-muted-foreground font-medium">
+                {formatDateID(item.createdAt)}
+              </p>
             </div>
-            {item.note && <p className="text-sm text-foreground/90 leading-relaxed bg-muted/30 p-3 rounded-lg border border-border/50">{item.note}</p>}
+            {item.note && (
+              <p className="text-sm text-foreground/90 leading-relaxed bg-muted/30 p-3 rounded-lg border border-border/50">
+                {item.note}
+              </p>
+            )}
           </div>
         </div>
       ))}

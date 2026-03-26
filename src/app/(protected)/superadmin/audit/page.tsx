@@ -20,14 +20,17 @@ export default function SuperadminAuditPage() {
   const { activities } = useActivity();
 
   const handleExport = () => {
-    exportToCSV(activities.map(a => ({
-      ID: a.id,
-      Type: a.type,
-      Event: a.title,
-      Detail: a.description,
-      Actor: a.actorName || "System",
-      Date: a.createdAt,
-    })), "audit_trail.csv");
+    exportToCSV(
+      activities.map((a) => ({
+        ID: a.id,
+        Type: a.type,
+        Event: a.title,
+        Detail: a.description,
+        Actor: a.actorName || "System",
+        Date: a.createdAt,
+      })),
+      "audit_trail.csv",
+    );
     toast.success("Audit trail exported to CSV");
   };
 
@@ -41,7 +44,12 @@ export default function SuperadminAuditPage() {
             <Button variant="outline" size="sm" className="gap-2" disabled>
               <Filter className="h-4 w-4" /> Filter
             </Button>
-            <Button variant="outline" size="sm" className="gap-2" onClick={handleExport}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2"
+              onClick={handleExport}
+            >
               <Download className="h-4 w-4" /> Export CSV
             </Button>
           </div>
@@ -53,7 +61,8 @@ export default function SuperadminAuditPage() {
         {activities.map((a, i) => {
           let styleKey = "info";
           if (a.type === "rejection") styleKey = "error";
-          if (a.type === "approval" || a.type === "payment") styleKey = "success";
+          if (a.type === "approval" || a.type === "payment")
+            styleKey = "success";
           if (a.type === "report") styleKey = "warning";
           const style = typeStyle[styleKey] ?? typeStyle.info;
 
@@ -84,7 +93,9 @@ export default function SuperadminAuditPage() {
           );
         })}
         {activities.length === 0 && (
-           <p className="text-muted-foreground text-sm pt-4">No audit logs available.</p>
+          <p className="text-muted-foreground text-sm pt-4">
+            No audit logs available.
+          </p>
         )}
       </div>
     </div>

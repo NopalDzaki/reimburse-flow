@@ -15,7 +15,10 @@ interface UserContextValue {
 const UserContext = createContext<UserContextValue | undefined>(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [users, setUsers] = useLocalStorage<User[]>("reimburse-users", mockUsers);
+  const [users, setUsers] = useLocalStorage<User[]>(
+    "reimburse-users",
+    mockUsers,
+  );
 
   const updateUserRole = (userId: string, role: UserRole) => {
     setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role } : u)));
@@ -26,7 +29,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   };
 
   const toggleActive = (userId: string) => {
-    setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, isActive: !u.isActive } : u)));
+    setUsers((prev) =>
+      prev.map((u) => (u.id === userId ? { ...u, isActive: !u.isActive } : u)),
+    );
   };
 
   const value = { users, updateUserRole, deleteUser, toggleActive };

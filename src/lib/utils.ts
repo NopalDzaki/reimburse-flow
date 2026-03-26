@@ -26,7 +26,10 @@ export function formatDateID(date: string | number | Date) {
 }
 
 export function getRelativeTime(date: string | number | Date) {
-  return formatDistanceToNow(new Date(date), { addSuffix: true, locale: localeID });
+  return formatDistanceToNow(new Date(date), {
+    addSuffix: true,
+    locale: localeID,
+  });
 }
 
 export function getStatusBadgeVariant(status: ReimbursementStatus) {
@@ -86,13 +89,18 @@ export const reportCategoryLabels = {
   lainnya: "Lainnya",
 };
 
-export function exportToCSV<T extends Record<string, any>>(data: T[], filename: string) {
+export function exportToCSV<T extends Record<string, any>>(
+  data: T[],
+  filename: string,
+) {
   if (!data || !data.length) return;
   const headers = Object.keys(data[0]).join(",");
-  const rows = data.map(row => 
-    Object.values(row).map(val => 
-      typeof val === "string" ? `"${val.replace(/"/g, '""')}"` : val
-    ).join(",")
+  const rows = data.map((row) =>
+    Object.values(row)
+      .map((val) =>
+        typeof val === "string" ? `"${val.replace(/"/g, '""')}"` : val,
+      )
+      .join(","),
   );
   const csv = [headers, ...rows].join("\n");
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });

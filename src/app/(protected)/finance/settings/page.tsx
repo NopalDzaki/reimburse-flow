@@ -1,23 +1,32 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { PageHeader } from "@/components/shared/page-header"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Banknote, Timer, Shield, Smartphone, CheckCircle2 } from "lucide-react"
-import { toast } from "sonner"
+import * as React from "react";
+import { PageHeader } from "@/components/shared/page-header";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Banknote,
+  Timer,
+  Shield,
+  Smartphone,
+  CheckCircle2,
+} from "lucide-react";
+import { toast } from "sonner";
 
 export default function FinanceSettingsPage() {
   const handleSaveDisbursement = () => {
-    toast.success("Disbursement rules saved successfully")
-  }
+    toast.success("Disbursement rules saved successfully");
+  };
 
   return (
     <div className="max-w-3xl space-y-6">
-      <PageHeader title="Finance Settings" description="Control payout rails, limits, and alerts." />
+      <PageHeader
+        title="Finance Settings"
+        description="Control payout rails, limits, and alerts."
+      />
 
       <Card className="border border-border/60 shadow-sm">
         <CardHeader className="pb-3">
@@ -44,7 +53,11 @@ export default function FinanceSettingsPage() {
           </div>
         </CardContent>
         <div className="flex justify-end px-6 pb-4">
-          <Button variant="default" className="gap-2" onClick={handleSaveDisbursement}>
+          <Button
+            variant="default"
+            className="gap-2"
+            onClick={handleSaveDisbursement}
+          >
             <CheckCircle2 className="h-4 w-4" /> Save disbursement rules
           </Button>
         </div>
@@ -60,16 +73,24 @@ export default function FinanceSettingsPage() {
           <div className="flex items-center justify-between rounded-lg border border-border/50 px-3 py-2">
             <div>
               <p className="font-medium text-foreground">Same-day cutoff</p>
-              <p className="text-xs text-muted-foreground">Payments submitted before this time go out today.</p>
+              <p className="text-xs text-muted-foreground">
+                Payments submitted before this time go out today.
+              </p>
             </div>
-            <Badge variant="outline" className="rounded-full">5:00 PM</Badge>
+            <Badge variant="outline" className="rounded-full">
+              5:00 PM
+            </Badge>
           </div>
           <div className="flex items-center justify-between rounded-lg border border-border/50 px-3 py-2">
             <div>
               <p className="font-medium text-foreground">SLA target</p>
-              <p className="text-xs text-muted-foreground">From approval to payout release.</p>
+              <p className="text-xs text-muted-foreground">
+                From approval to payout release.
+              </p>
             </div>
-            <Badge variant="secondary" className="rounded-full">4 hours</Badge>
+            <Badge variant="secondary" className="rounded-full">
+              4 hours
+            </Badge>
           </div>
         </CardContent>
       </Card>
@@ -84,19 +105,31 @@ export default function FinanceSettingsPage() {
           <ToggleRow label="Dual approval above $10k" defaultOn />
           <ToggleRow label="Block mismatched bank name" defaultOn />
           <ToggleRow label="Notify on rapid velocity spikes" />
-          <ToggleRow label="Require biometric on mobile payouts" defaultOn icon={<Smartphone className="h-4 w-4" />} />
+          <ToggleRow
+            label="Require biometric on mobile payouts"
+            defaultOn
+            icon={<Smartphone className="h-4 w-4" />}
+          />
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
-function ToggleRow({ label, defaultOn = false, icon }: { label: string; defaultOn?: boolean; icon?: React.ReactNode }) {
-  const [isOn, setIsOn] = React.useState(defaultOn)
+function ToggleRow({
+  label,
+  defaultOn = false,
+  icon,
+}: {
+  label: string;
+  defaultOn?: boolean;
+  icon?: React.ReactNode;
+}) {
+  const [isOn, setIsOn] = React.useState(defaultOn);
   const toggle = () => {
-    setIsOn(!isOn)
-    toast.success(`Control "${label}" ${!isOn ? 'enabled' : 'disabled'}`)
-  }
+    setIsOn(!isOn);
+    toast.success(`Control "${label}" ${!isOn ? "enabled" : "disabled"}`);
+  };
 
   return (
     <div className="flex items-center justify-between gap-3 rounded-lg border border-border/50 px-3 py-2">
@@ -104,9 +137,14 @@ function ToggleRow({ label, defaultOn = false, icon }: { label: string; defaultO
         {icon}
         {label}
       </div>
-      <button onClick={toggle} className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 border-transparent transition-colors focus-visible:outline-none cursor-pointer ${isOn ? "bg-primary" : "bg-muted"}`}>
-        <span className={`pointer-events-none block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${isOn ? "translate-x-4" : "translate-x-0"}`} />
+      <button
+        onClick={toggle}
+        className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 border-transparent transition-colors focus-visible:outline-none cursor-pointer ${isOn ? "bg-primary" : "bg-muted"}`}
+      >
+        <span
+          className={`pointer-events-none block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${isOn ? "translate-x-4" : "translate-x-0"}`}
+        />
       </button>
     </div>
-  )
+  );
 }

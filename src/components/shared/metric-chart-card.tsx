@@ -1,7 +1,14 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { formatCurrencyIDR } from "@/lib/utils";
 
 interface Props {
@@ -11,7 +18,12 @@ interface Props {
   valueFormatter?: (value: number) => string;
 }
 
-export function MetricChartCard({ title, data, color = "hsl(var(--primary))", valueFormatter = formatCurrencyIDR }: Props) {
+export function MetricChartCard({
+  title,
+  data,
+  color = "hsl(var(--primary))",
+  valueFormatter = formatCurrencyIDR,
+}: Props) {
   return (
     <Card>
       <CardHeader>
@@ -26,13 +38,34 @@ export function MetricChartCard({ title, data, color = "hsl(var(--primary))", va
                 <stop offset="95%" stopColor={color} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-            <YAxis tickFormatter={(v) => `${v / 1000}k`} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} width={50} />
+            <XAxis
+              dataKey="name"
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+            />
+            <YAxis
+              tickFormatter={(v) => `${v / 1000}k`}
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+              width={50}
+            />
             <Tooltip
-              contentStyle={{ borderRadius: 12, border: "1px solid hsl(var(--border))", background: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}
+              contentStyle={{
+                borderRadius: 12,
+                border: "1px solid hsl(var(--border))",
+                background: "hsl(var(--card))",
+                color: "hsl(var(--card-foreground))",
+              }}
               formatter={(value: number) => valueFormatter(value)}
             />
-            <Area type="monotone" dataKey="value" stroke={color} strokeWidth={2} fillOpacity={1} fill={`url(#grad-${title})`} />
+            <Area
+              type="monotone"
+              dataKey="value"
+              stroke={color}
+              strokeWidth={2}
+              fillOpacity={1}
+              fill={`url(#grad-${title})`}
+            />
           </AreaChart>
         </ResponsiveContainer>
       </CardContent>
