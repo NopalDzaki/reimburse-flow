@@ -8,12 +8,22 @@ import { Label } from "@/components/ui/label";
 import { Camera, Mail, Building2, Shield, Loader2 } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
 
 export default function ProfilePage() {
   const { user } = useAuth();
   const [isSaving, setIsSaving] = React.useState(false);
 
-  const handleSave = () => {
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      fullName: user?.name || "",
+      email: user?.email || "",
+      department: "Engineering",
+      title: "Software Engineer",
+    },
+  });
+
+  const onSubmit = (data: any) => {
     setIsSaving(true);
     setTimeout(() => {
       setIsSaving(false);
@@ -66,35 +76,35 @@ export default function ProfilePage() {
       </div>
 
       {/* Editable Fields */}
-      <div className="rounded-xl border border-border/50 bg-card p-6 shadow-sm space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="rounded-xl border border-border/50 bg-card p-6 shadow-sm space-y-5">
         <h3 className="font-heading font-semibold text-foreground">
           Personal Information
         </h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label>Full Name</Label>
-            <Input defaultValue={user?.name} />
+            <Input {...register("fullName")} />
           </div>
           <div className="space-y-2">
             <Label>Email</Label>
-            <Input defaultValue={user?.email} type="email" />
+            <Input {...register("email")} type="email" />
           </div>
           <div className="space-y-2">
             <Label>Department</Label>
-            <Input defaultValue="Engineering" />
+            <Input {...register("department")} />
           </div>
           <div className="space-y-2">
             <Label>Title</Label>
-            <Input defaultValue="Software Engineer" />
+            <Input {...register("title")} />
           </div>
         </div>
         <div className="flex justify-end pt-2 border-t border-border/50">
-          <Button variant="default" onClick={handleSave} disabled={isSaving}>
+          <Button variant="default" type="submit" disabled={isSaving}>
             {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Save Changes
           </Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

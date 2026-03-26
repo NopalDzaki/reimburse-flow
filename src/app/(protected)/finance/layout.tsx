@@ -10,9 +10,6 @@ export default function FinanceLayout({
     <AppShell
       roleConfig="finance"
       basePath="/finance"
-      userName="Riley North"
-      userRole="Finance Officer"
-      avatarInitial="RN"
     >
       {children}
     </AppShell>

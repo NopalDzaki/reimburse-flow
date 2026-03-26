@@ -10,6 +10,7 @@ import { useReimbursements } from "@/context/reimbursement-context";
 import { formatCurrencyIDR, formatDateID, getRelativeTime } from "@/lib/utils";
 import { MetricChartCard } from "@/components/shared/metric-chart-card";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function FinanceDashboardPage() {
   const { reimbursements } = useReimbursements();
@@ -43,11 +44,11 @@ export default function FinanceDashboardPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="gap-2">
+          <Button onClick={() => toast.info("Filter functionality is in development")} variant="outline" className="gap-2">
             <Filter className="h-4 w-4" />
             Filter
           </Button>
-          <Button variant="outline" className="gap-2">
+          <Button onClick={() => toast.info("Export functionality is in development")} variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
             Export
           </Button>

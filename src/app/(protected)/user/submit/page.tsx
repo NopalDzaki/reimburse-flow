@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useReimbursements } from "@/context/reimbursement-context";
 import { useAuth } from "@/context/auth-context";
+import { useActivity } from "@/context/activity-context";
 import { useNotifications } from "@/context/notification-context";
 import { toast } from "sonner";
 
@@ -47,6 +48,7 @@ export default function SubmitClaimPage() {
   const router = useRouter();
   const { createReimbursement } = useReimbursements();
   const { user } = useAuth();
+  const { addActivity } = useActivity();
   const { addNotification } = useNotifications();
 
   // Mock file upload state
@@ -113,6 +115,15 @@ export default function SubmitClaimPage() {
       accountNumber: "0000000000",
       accountHolderName: user?.name ?? "User",
       receiptImage: receiptPreview || "dummy.jpg",
+    });
+
+    addActivity({
+      type: "reimbursement",
+      title: "Pengajuan baru",
+      description: `${user?.name || "User"} mengajukan ${newClaim.title}`,
+      actorName: user?.name || "User",
+      relatedEntityId: newClaim.id,
+      entityType: "reimbursement",
     });
 
     addNotification({

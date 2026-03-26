@@ -10,9 +10,6 @@ export default function SuperadminLayout({
     <AppShell
       roleConfig="superadmin"
       basePath="/superadmin"
-      userName="System Admin"
-      userRole="Superadmin"
-      avatarInitial="SA"
     >
       {children}
     </AppShell>

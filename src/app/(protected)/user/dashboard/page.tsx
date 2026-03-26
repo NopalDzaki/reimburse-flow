@@ -248,7 +248,7 @@ export default function UserDashboard() {
           className="h-auto py-4 flex flex-col items-center justify-center gap-2 bg-card hover:bg-muted/50 border-border/50"
           asChild
         >
-          <Link href="/user/reports">
+          <Link href="/user/help">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-warning/10 text-warning mb-1">
               <HandHelping className="h-5 w-5" />
             </span>

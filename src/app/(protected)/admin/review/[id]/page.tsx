@@ -56,8 +56,8 @@ export default function AdminReviewDetailPage() {
     addActivity({
       type: "approval",
       title: "Disetujui admin",
-      description: `${user?.name} menyetujui pengajuan ${reimbursement.title}`,
-      actorName: user?.name,
+      description: `${user?.name || "Admin"} menyetujui pengajuan ${reimbursement.title}`,
+      actorName: user?.name || "Admin",
       relatedEntityId: id,
       entityType: "reimbursement",
     });
@@ -82,8 +82,8 @@ export default function AdminReviewDetailPage() {
     addActivity({
       type: "rejection",
       title: "Ditolak admin",
-      description: `${user?.name} menolak pengajuan ${reimbursement.title} dengan alasan: ${reason}`,
-      actorName: user?.name,
+      description: `${user?.name || "Admin"} menolak pengajuan ${reimbursement.title} dengan alasan: ${reason}`,
+      actorName: user?.name || "Admin",
       relatedEntityId: id,
       entityType: "reimbursement",
     });

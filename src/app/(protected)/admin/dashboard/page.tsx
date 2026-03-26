@@ -10,6 +10,7 @@ import { useActivity } from "@/context/activity-context";
 import { formatCurrencyIDR, getRelativeTime } from "@/lib/utils";
 import { ActivityFeed } from "@/components/shared/activity-feed";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function AdminDashboard() {
   const { reimbursements } = useReimbursements();
@@ -117,10 +118,10 @@ export default function AdminDashboard() {
               )}
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button onClick={() => toast.info("Filter and batch actions are in development")} variant="outline" size="sm" className="gap-2">
                 <Filter className="h-4 w-4" /> Filter
               </Button>
-              <Button variant="secondary" size="sm" className="gap-2">
+              <Button onClick={() => toast.info("Auto-approve logic is in development")} variant="secondary" size="sm" className="gap-2">
                 <CheckCircle2 className="h-4 w-4" /> Auto-approve safe
               </Button>
             </div>

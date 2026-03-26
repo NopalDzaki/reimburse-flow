@@ -7,13 +7,7 @@ export default function UserLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppShell
-      roleConfig="user"
-      basePath="/user"
-      userName="Alex Morgan"
-      userRole="Employee"
-      avatarInitial="AM"
-    >
+    <AppShell roleConfig="user" basePath="/user">
       {children}
     </AppShell>
   );

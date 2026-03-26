@@ -4,6 +4,7 @@ import * as React from "react";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
 import { MobileNav } from "./mobile-nav";
+import { useAuth } from "@/context/auth-context";
 import {
   USER_NAV,
   ADMIN_NAV,
@@ -15,19 +16,17 @@ interface AppShellProps {
   children: React.ReactNode;
   roleConfig: "user" | "admin" | "finance" | "superadmin";
   basePath: string;
-  userName: string;
-  userRole: string;
-  avatarInitial: string;
 }
 
 export function AppShell({
   children,
   roleConfig,
   basePath,
-  userName,
-  userRole,
-  avatarInitial,
 }: AppShellProps) {
+  const { user } = useAuth();
+  const userName = user?.name || "Guest";
+  const userRole = user?.role || roleConfig;
+  const avatarInitial = userName.substring(0, 2).toUpperCase();
   const navItems = React.useMemo(() => {
     switch (roleConfig) {
       case "user":

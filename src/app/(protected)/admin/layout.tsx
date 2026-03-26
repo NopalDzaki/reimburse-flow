@@ -10,9 +10,6 @@ export default function AdminLayout({
     <AppShell
       roleConfig="admin"
       basePath="/admin"
-      userName="Jordan Smith"
-      userRole="Manager"
-      avatarInitial="JS"
     >
       {children}
     </AppShell>

@@ -59,8 +59,8 @@ export default function FinancePaymentDetailPage() {
     addActivity({
       type: "payment",
       title: "Pembayaran selesai",
-      description: `${user?.name} menyelesaikan pembayaran untuk ${reimbursement.title}${note ? ` dengan catatan: ${note}` : ""}`,
-      actorName: user?.name,
+      description: `${user?.name || "Finance"} menyelesaikan pembayaran untuk ${reimbursement.title}${note ? ` dengan catatan: ${note}` : ""}`,
+      actorName: user?.name || "Finance",
       relatedEntityId: id,
       entityType: "reimbursement",
     });

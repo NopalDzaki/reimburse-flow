@@ -45,7 +45,11 @@ export function MetricChartCard({
               tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
             />
             <YAxis
-              tickFormatter={(v) => `${v / 1000}k`}
+              tickFormatter={(v) => {
+                if (v >= 1000000) return `Rp${v / 1000000}Jt`;
+                if (v >= 1000) return `Rp${v / 1000}Rb`;
+                return `Rp${v}`;
+              }}
               tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
               width={50}
             />

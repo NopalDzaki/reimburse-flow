@@ -3,6 +3,8 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { User, Shield, Briefcase, Key } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
+import type { UserRole } from "@/types";
 
 import {
   Card,
@@ -16,9 +18,10 @@ import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { loginAsRole } = useAuth();
 
   const handleLogin = (role: string) => {
-    // In a real app we'd set a cookie or JWT. For demo, we just route.
+    loginAsRole(role as UserRole);
     router.push(`/${role}/dashboard`);
   };
 
